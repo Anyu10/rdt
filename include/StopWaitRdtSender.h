@@ -1,8 +1,7 @@
 #ifndef STOP_WAIT_RDT_SENDER_H
 #define STOP_WAIT_RDT_SENDER_H
 #include "RdtSender.h"
-class StopWaitRdtSender :public RdtSender
-{
+class StopWaitRdtSender : public RdtSender {
 private:
 	int expectSequenceNumberSend;	// 下一个发送序号 
 	bool waitingState;				// 是否处于等待Ack的状态

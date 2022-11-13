@@ -2,7 +2,7 @@
 #define TOOL_H
 #include "DataStructure.h"
 
-struct Tool{
+struct Tool {
 	/* 打印Packet的信息*/
 	virtual void printPacket(const char * description, const Packet &packet) = 0;
 	/*计算一个Packet的校验和*/

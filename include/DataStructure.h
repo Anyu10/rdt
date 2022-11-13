@@ -1,7 +1,7 @@
 #ifndef DATA_STRUCTURE_H
 #define DATA_STRUCTURE_H
 
-struct  Configuration{
+struct  Configuration {
 
 	/**
 	定义各层协议Payload数据的大小（字节为单位）
