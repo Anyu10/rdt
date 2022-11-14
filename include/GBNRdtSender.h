@@ -10,7 +10,6 @@ class GBNRdtSender : public RdtSender{
     int base_;
     int next_seq_;
     std::deque<Packet> que_;
-    bool waiting_state_;
 
     public:
 
