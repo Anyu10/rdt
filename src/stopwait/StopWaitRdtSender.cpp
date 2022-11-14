@@ -3,14 +3,10 @@
 #include "StopWaitRdtSender.h"
 
 
-StopWaitRdtSender::StopWaitRdtSender():expectSequenceNumberSend(0),waitingState(false)
-{
-}
+StopWaitRdtSender::StopWaitRdtSender() : expectSequenceNumberSend(0), waitingState(false) { }
 
 
-StopWaitRdtSender::~StopWaitRdtSender()
-{
-}
+StopWaitRdtSender::~StopWaitRdtSender() { }
 
 
 
