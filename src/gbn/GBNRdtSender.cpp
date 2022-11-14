@@ -3,7 +3,7 @@
 #include "DataStructure.h"
 
 
-GBNRdtSender::GBNRdtSender() : base_{1}, next_seq_{1}, win_size_{5}, waiting_state_{false} { }
+GBNRdtSender::GBNRdtSender() : base_{1}, next_seq_{1}, win_size_{5} { }
 
 
 GBNRdtSender::~GBNRdtSender() { }
