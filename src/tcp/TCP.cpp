@@ -5,21 +5,21 @@
 #include "Global.h"
 #include "RdtSender.h"
 #include "RdtReceiver.h"
-#include "StopWaitRdtSender.h"
-#include "StopWaitRdtReceiver.h"
+#include "TCPRdtSender.h"
+#include "TCPRdtReceiver.h"
 
 
 int main(int argc, char* argv[])
 {
-	RdtSender *ps = new StopWaitRdtSender();
-	RdtReceiver * pr = new StopWaitRdtReceiver();
+	RdtSender *ps = new TCPRdtSender();
+	RdtReceiver * pr = new TCPRdtReceiver();
 	pns->setRunMode(0);  //VERBOS模式
 	// pns->setRunMode(1);  //安静模式
 	pns->init();
 	pns->setRtdSender(ps);
 	pns->setRtdReceiver(pr);
 	pns->setInputFile("/mnt/d/Project/rdt/input.txt");
-	pns->setOutputFile("/mnt/d/Project/rdt/output.txt/");
+	pns->setOutputFile("/mnt/d/Project/rdt/output.txt");
 	pns->start();
 
 	delete ps;

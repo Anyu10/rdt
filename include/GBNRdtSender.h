@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RdtSender.h"
-#include<deque>
+#include <deque>
 
 class GBNRdtSender : public RdtSender{
     private:
