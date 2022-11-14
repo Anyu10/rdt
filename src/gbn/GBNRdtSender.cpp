@@ -27,7 +27,7 @@ bool GBNRdtSender::send(const Message &message) {
 	pkt.checksum = pUtils->calculateCheckSum(pkt);
 	
 	pns->sendToNetworkLayer(RECEIVER, pkt);				//调用模拟网络环境的sendToNetworkLayer，通过网络层发送到对方
-	pUtils->printPacket("发送方发送报文", pkt);
+	pUtils->printPacket("发送方发送报文, 并启动了一个定时器", pkt);
 
 	que_.push_back(pkt);
 	if (next_seq_ == base_) {
@@ -55,20 +55,21 @@ void GBNRdtSender::receive(const Packet &ackPkt) {
 		if (base_ != next_seq_) {
 			pns->startTimer(SENDER, Configuration::TIME_OUT, base_);
 		}
+
+		pUtils->printPacket("发送方正确收到确认, 关闭之前的定时器", ackPkt);
 	
-		pUtils->printPacket("发送方正确收到确认", ackPkt);
 	} else {
 		if (checkSum != ackPkt.checksum) {
 			pUtils->printPacket("发送方没有正确收到确认, 包损坏", que_.front());
 		} else if (ackPkt.acknum < base_) {
-			pUtils->printPacket("发送方没有正确收到确认, 收到的acknum小于当前的base", que_.front());
+			pUtils->printPacket("发送方没有正确收到确认, 但收到的acknum小于当前的base", que_.front());
 		}
 	}
 
 }
 
 void GBNRdtSender::timeoutHandler(int seqNum) {
-	pns->stopTimer(SENDER, seqNum);										//首先关闭定时器
+	pns->stopTimer(SENDER, seqNum);					//首先关闭定时器
 	
 	for (int i = base_; i < next_seq_; ++i) {
 		pns->sendToNetworkLayer(RECEIVER, que_.at(i - base_));

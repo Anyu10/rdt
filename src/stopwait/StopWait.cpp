@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 	pns->setRtdSender(ps);
 	pns->setRtdReceiver(pr);
 	pns->setInputFile("/mnt/d/Project/rdt/input.txt");
-	pns->setOutputFile("/mnt/d/Project/rdt/output.txt/");
+	pns->setOutputFile("/mnt/d/Project/rdt/output.txt");
 	pns->start();
 
 	delete ps;
