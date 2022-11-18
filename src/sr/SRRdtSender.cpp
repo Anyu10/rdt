@@ -44,9 +44,11 @@ void SRRdtSender::receive(const Packet &ackPkt) {
 
 	//如果校验和正确，并且确认序号落在窗口内
 	if (checkSum == ackPkt.checksum && ackPkt.acknum >= base_ && ackPkt.acknum < base_ + win_size_) {
-		ok_.at(ackPkt.acknum - base_) = true;
-		pUtils->printPacket("发送方正确收到确认", ackPkt);
-		pns->stopTimer(SENDER, ackPkt.acknum);		//关闭定时器
+		if (!ok_.at(ackPkt.acknum - base_)) {
+			ok_.at(ackPkt.acknum - base_) = true;
+			pUtils->printPacket("发送方正确收到确认", ackPkt);
+			pns->stopTimer(SENDER, ackPkt.acknum);		//关闭定时器
+		}
 
 		while (ok_.front()) {
 			ok_.pop_front();
