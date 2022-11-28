@@ -27,11 +27,12 @@ bool GBNRdtSender::send(const Message &message) {
 	pkt.checksum = pUtils->calculateCheckSum(pkt);
 	
 	pns->sendToNetworkLayer(RECEIVER, pkt);				//调用模拟网络环境的sendToNetworkLayer，通过网络层发送到对方
-	pUtils->printPacket("发送方发送报文, 并启动了一个定时器", pkt);
+	pUtils->printPacket("发送方发送报文", pkt);
 
 	que_.push_back(pkt);
 	if (next_seq_ == base_) {
 		pns->startTimer(SENDER, Configuration::TIME_OUT, pkt.seqnum);	//启动发送方定时器
+		printf("发送方启动了一个定时器\n");
 	}
 	next_seq_++;
 
@@ -52,11 +53,13 @@ void GBNRdtSender::receive(const Packet &ackPkt) {
 		pns->stopTimer(SENDER, base_);
 		base_ = ackPkt.acknum + 1;
 
+		pUtils->printPacket("---发送方正确收到确认, 关闭之前的定时器", ackPkt);
+
 		if (base_ != next_seq_) {
 			pns->startTimer(SENDER, Configuration::TIME_OUT, base_);
+			printf("发送方为下一个包重启了一个计时器\n");
 		}
 
-		pUtils->printPacket("发送方正确收到确认, 关闭之前的定时器", ackPkt);
 	
 	} else {
 		if (checkSum != ackPkt.checksum) {
@@ -73,7 +76,7 @@ void GBNRdtSender::timeoutHandler(int seqNum) {
 	
 	for (int i = base_; i < next_seq_; ++i) {
 		pns->sendToNetworkLayer(RECEIVER, que_.at(i - base_));
-		pUtils->printPacket("发送方定时器时间到，重发报文中", que_.at(i - base_));
+		pUtils->printPacket("+++发送方定时器时间到，重发报文中", que_.at(i - base_));
 	}
 
 	pns->startTimer(SENDER, Configuration::TIME_OUT, base_);

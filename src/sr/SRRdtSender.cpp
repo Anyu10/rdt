@@ -46,16 +46,18 @@ void SRRdtSender::receive(const Packet &ackPkt) {
 	if (checkSum == ackPkt.checksum && ackPkt.acknum >= base_ && ackPkt.acknum < base_ + win_size_) {
 		if (!ok_.at(ackPkt.acknum - base_)) {
 			ok_.at(ackPkt.acknum - base_) = true;
-			pUtils->printPacket("发送方正确收到确认", ackPkt);
+			pUtils->printPacket("---发送方正确收到确认，并关闭响应的计时器", ackPkt);
 			pns->stopTimer(SENDER, ackPkt.acknum);		//关闭定时器
 		}
-
+		int slide = 0;
 		while (ok_.front()) {
 			ok_.pop_front();
 			ok_.push_back(false);
 			que_.pop_front();
 			base_++;
+			slide++;
 		}	//& 维护que_和ok_两个队列
+		printf("------窗口移动了%d位\n", slide);
 
 	}
 	else {

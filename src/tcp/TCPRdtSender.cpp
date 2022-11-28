@@ -72,13 +72,18 @@ void TCPRdtSender::receive(const Packet &ackPkt) {
 			return;
 		}
 		if (cumulation_ == 3) {
-			// pns->stopTimer(SENDER, base_);
-			for (Packet pkt : que_) {
-				pns->sendToNetworkLayer(RECEIVER, pkt);
-				pUtils->printPacket("发送方收到三个冗余确认, 重发报文中", pkt);
+			pns->stopTimer(SENDER, base_);
+			// for (Packet pkt : que_) {
+			// 	pns->sendToNetworkLayer(RECEIVER, pkt);
+			// 	pUtils->printPacket("发送方收到三个冗余确认, 重发报文中", pkt);
+			// }
+			if (que_.size() != 0) {
+				pns->sendToNetworkLayer(RECEIVER, que_.at(0));
+				pUtils->printPacket("&&&发送方收到三个冗余确认, 重发报文中", que_.at(0));
+				cumulation_ = 0;
+				pns->startTimer(SENDER, Configuration::TIME_OUT, base_);
 			}
 			// pns->startTimer(SENDER, Configuration::TIME_OUT, base_);
-			cumulation_ = 0;
 		}
 	}
 
@@ -87,11 +92,13 @@ void TCPRdtSender::receive(const Packet &ackPkt) {
 void TCPRdtSender::timeoutHandler(int seqNum) {
 	pns->stopTimer(SENDER, seqNum);					//首先关闭定时器
 	
-	for (int i = base_; i < next_seq_; ++i) {
-		pns->sendToNetworkLayer(RECEIVER, que_.at(i - base_));
-		pUtils->printPacket("发送方定时器时间到, 重发报文中", que_.at(i - base_));
+	// for (int i = base_; i < next_seq_; ++i) {
+	// 	pns->sendToNetworkLayer(RECEIVER, que_.at(i - base_));
+	// 	pUtils->printPacket("发送方定时器时间到, 重发报文中", que_.at(i - base_));
+	// }
+	if (que_.size() != 0) {
+		pns->sendToNetworkLayer(RECEIVER, que_.at(0));
+		pUtils->printPacket("发送方定时器时间到, 重发报文中", que_.at(0));
+		pns->startTimer(SENDER, Configuration::TIME_OUT, base_);
 	}
-
-	pns->startTimer(SENDER, Configuration::TIME_OUT, base_);
-
 }

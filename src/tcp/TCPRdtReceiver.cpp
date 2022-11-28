@@ -46,7 +46,7 @@ void TCPRdtReceiver::receive(const Packet &packet) {
 			pUtils->printPacket("接收方没有正确收到发送方的报文, 报文序号不对", packet);
 		}
 		
-		pUtils->printPacket("接收方重新发送上次的确认报文", ack_pkt_);
+		pUtils->printPacket("&&&接收方重新发送上次的确认报文", ack_pkt_);
 		pns->sendToNetworkLayer(SENDER, ack_pkt_);	//调用模拟网络环境的sendToNetworkLayer，通过网络层发送上次的确认报文
 
 	}

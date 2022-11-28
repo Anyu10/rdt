@@ -23,7 +23,7 @@ void GBNRdtReceiver::receive(const Packet &packet) {
 
 	//如果校验和正确，同时收到报文的序号等于接收方期待收到的报文序号一致
 	if (checkSum == packet.checksum && expected_seqnum_ == packet.seqnum) {
-		pUtils->printPacket("接收方正确收到发送方的报文", packet);
+		pUtils->printPacket("===接收方正确收到发送方的报文", packet);
 
 		Message msg;
 		memcpy(msg.data, packet.payload, sizeof(packet.payload));
